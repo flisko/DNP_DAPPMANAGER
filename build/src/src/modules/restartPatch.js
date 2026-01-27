@@ -20,7 +20,7 @@ const params = require("params");
 async function restartPatch(IMAGE_NAME = "") {
   if (!IMAGE_NAME.includes(":")) {
     let dnpList = await dockerList.listContainers();
-    let container = dnpList.find(c => (c.name || "").includes(IMAGE_NAME));
+    let container = dnpList.find((c) => (c.name || "").includes(IMAGE_NAME));
     let version = container.version;
     IMAGE_NAME += ":" + version;
   }
@@ -32,11 +32,10 @@ async function restartPatch(IMAGE_NAME = "") {
   );
   const PATH_LOCAL = "/usr/src/dappnode/DNCORE/docker-compose-dappmanager.yml";
   const PATH_REMOTE = "/usr/src/app/DNCORE/docker-compose-dappmanager.yml";
-  const DOCKERCOMPOSE_DATA = `version: '3.4'
-
-services:
+  const DOCKERCOMPOSE_DATA = `services:
     restart.dnp.dappnode.eth:
         image: ${IMAGE_NAME}
+        pull_policy: never
         container_name: DAppNodeTool-restart.dnp.dappnode.eth
         volumes:
             - '${PATH_LOCAL}:${PATH_REMOTE}'
